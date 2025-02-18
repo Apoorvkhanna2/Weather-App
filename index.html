@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: cyan; }
+        input { padding: 10px; margin: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
+        #weather-result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Weather App</h2>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+    
+    <div id="weather-result"></div>
+
+    <script>
+        async function getWeather() {
+            const city = document.getElementById("city").value;
+            if (!city) {
+                alert("Please enter a city name.");
+                return;
+            }
+
+            const response = await fetch(`/weather?city=${city}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                document.getElementById("weather-result").innerHTML = `
+                    <h3>${data.city}</h3>
+                    <p>Temperature: ${data.temperature}°C</p>
+                    <p>Humidity: ${data.humidity}%</p>
+                    <p>Condition: ${data.description}</p>
+                `;
+            } else {
+                document.getElementById("weather-result").innerHTML = `<p style="color: red;">${data.error}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
